@@ -1,10 +1,6 @@
-from flask import Flask
+from cartolif import create_app
 
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return "Olá, JIFBA Fantasy App!"
+app = create_app()
 
 if __name__ == '__main__':
     app.run(debug=True)

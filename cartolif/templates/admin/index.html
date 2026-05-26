@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="grid">
+    <article>
+        <header><h2>Painel de Administração</h2></header>
+        <p>Bem-vindo, {{ current_user.nome }}. Use esta página para gerenciar o campeonato.</p>
+    </article>
+</div>
+
+<div class="grid">
+    <article>
+        <header><h3>Gerenciar Delegações</h3></header>
+
+        <form method="POST" action="{{ url_for('admin.add_delegacao') }}">
+            <label for="nome_delegacao">Nome da Nova Delegação</label>
+            <input type="text" id="nome_delegacao" name="nome" required>
+            <button type="submit">Adicionar Delegação</button>
+        </form>
+
+        <hr>
+
+        <h4>Delegações Existentes</h4>
+        {% if delegacoes %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Líder</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for delegacao in delegacoes %}
+                <tr>
+                    <td>{{ delegacao.nome }}</td>
+                    <td>{{ delegacao.lider.nome if delegacao.lider else 'Nenhum' }}</td>
+                    <td><a href="{{ url_for('admin.manage_delegacao', id=delegacao.id) }}">Gerenciar</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>Nenhuma delegação cadastrada ainda.</p>
+        {% endif %}
+    </article>
+
+    <article>
+        <header><h3>Gerenciar Usuários</h3></header>
+        <p>Funcionalidade a ser implementada.</p>
+    </article>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<article>
+    <header>
+        <h2>Painel de Líder: Delegação {{ delegacao.nome }}</h2>
+    </header>
+
+    <p>Bem-vindo, {{ current_user.nome }}. Use esta página para gerenciar os jogadores da sua delegação.</p>
+
+    <div class="grid">
+        <section>
+            <h4>Adicionar Novo Jogador</h4>
+            <form method="POST" action="{{ url_for('lider.add_jogador') }}">
+                <label for="nome_jogador">Nome do Jogador</label>
+                <input type="text" id="nome_jogador" name="nome" required>
+                <button type="submit">Adicionar Jogador</button>
+            </form>
+        </section>
+
+        <section>
+            <h4>Jogadores Cadastrados</h4>
+            {% if delegacao.jogadores %}
+            <ul>
+                {% for jogador in delegacao.jogadores|sort(attribute='nome') %}
+                <li>{{ jogador.nome }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>Nenhum jogador cadastrado ainda.</p>
+            {% endif %}
+        </section>
+    </div>
+</article>
+{% endblock %}

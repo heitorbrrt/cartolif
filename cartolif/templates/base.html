@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CartolIF</title>
+    <!-- Pico.css para um estilo limpo e moderno -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <!-- Nosso CSS customizado (se necessário) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="container-fluid">
+        <ul>
+            <li><a href="{{ url_for('routes.index') }}"><strong>CartolIF</strong></a></li>
+        </ul>
+        <ul>
+            {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('routes.dashboard') }}">Meu Time</a></li>
+
+                {% if current_user.cargo == 'LIDER' %}
+                <li><a href="{{ url_for('lider.index') }}">Painel de Líder</a></li>
+                {% endif %}
+
+                {% if current_user.cargo == 'ADMIN' %}
+                <li><a href="{{ url_for('admin.index') }}">Admin</a></li>
+                {% endif %}
+
+                <li><a href="{{ url_for('auth.logout') }}">Sair</a></li>
+            {% else %}
+                <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                <li><a href="{{ url_for('auth.signup') }}" role="button">Cadastrar</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <article class="{{ category }}">
+                {{ message }}
+            </article>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="container">
+        <small>Desenvolvido para o JIFBA - Campus Irecê</small>
+    </footer>
+</body>
+</html>

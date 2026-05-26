@@ -1,101 +1,158 @@
-# Documento de Desenvolvimento - JIFBA Fantasy App
+# Documento de Desenvolvimento - CartolIF
 
 ## 1. Visão Geral
 
-O projeto consiste em desenvolver um aplicativo de fantasy game, similar ao Cartola FC, para o campeonato escolar JIFBA (Jogos Internos do IFBA - Campus Irecê). O objetivo é aumentar o engajamento dos estudantes com o evento, permitindo que eles criem times virtuais com os jogadores reais das delegações e pontuem de acordo com o desempenho deles nas partidas.
+O projeto **CartolIF** é um aplicativo web de *fantasy game* desenhado especificamente para os Jogos Internos do IFBA - Campus Irecê (JIFBA). A plataforma permitirá que a comunidade acadêmica (alunos e servidores) monte seus próprios times com os atletas que participarão do campeonato, competindo em uma liga virtual baseada no desempenho real dos atletas nas partidas.
 
-**Tema:** Copa do Mundo 2024
+O objetivo principal é aumentar o engajamento e a interação da comunidade com o evento esportivo, trazendo uma camada de gamificação e competição saudável.
 
 ---
 
-## 2. Requisitos Funcionais
+## 2. Requisitos Funcionais Detalhados
 
-### 2.1. Gerenciamento de Usuários
-- **Cadastro e Login:** Usuários poderão se cadastrar com e-mail e senha.
-- **Perfis de Usuário:** Cada usuário terá um perfil simples com seu nome e time de fantasia.
+### 2.1. Autenticação e Gerenciamento de Usuários
+- **RF01: Cadastro de Usuário:** Qualquer pessoa com um e-mail válido poderá se cadastrar fornecendo nome, e-mail e senha.
+- **RF02: Login de Usuário:** Usuários cadastrados poderão acessar a plataforma usando e-mail e senha.
+- **RF03: Sistema de Permissões (Cargos):** O sistema terá três níveis de acesso:
+    - **Administrador:** Controle total sobre a plataforma. Pode gerenciar usuários, delegações, partidas e registrar todos os eventos.
+    - **Líder de Delegação:** Gerencia os jogadores de sua própria delegação. Permissão concedida por um Administrador.
+    - **Usuário Padrão:** Acesso padrão para montar seu time, visualizar rankings e estatísticas.
 
-### 2.2. Sistema de Permissões (Cargos)
-O sistema terá três níveis de acesso principais:
+### 2.2. Gerenciamento do Campeonato (Admin e Líderes)
+- **RF04: Gerenciamento de Delegações (Admin):** O admin poderá criar, editar e excluir delegações (times do campeonato).
+- **RF05: Gerenciamento de Jogadores (Líder):** O líder de uma delegação poderá cadastrar, editar e remover os jogadores do seu time.
+- **RF06: Gerenciamento de Partidas (Admin):** O admin poderá agendar as partidas, informando as delegações envolvidas e a data/hora.
+- **RF07: Registro de Resultados (Admin):** Após uma partida, o admin registrará o placar final e os eventos que geram pontuação.
 
-- **Administrador (Admin):**
-    - Gerencia todas as permissões.
-    - Cadastra e edita delegações.
-    - Registra os resultados das partidas (placar, gols, etc.).
-    - Atribui o prêmio de "Melhor da Partida" a um jogador.
-    - Pode moderar conteúdo e usuários.
-
-- **Líder de Delegação:**
-    - Cargo atribuído por um Administrador.
-    - Pode cadastrar e gerenciar os jogadores da sua própria delegação.
-
-- **Usuário Padrão:**
-    - Cria e gerencia seu time de fantasia.
-    - Visualiza o ranking geral.
-    - Visualiza as estatísticas dos jogadores e das partidas.
-
-### 2.3. Gerenciamento do Time de Fantasia
-- **Criação do Time:** Cada usuário pode criar um time de fantasia, dando um nome a ele.
-- **Escalação:** O usuário deverá escalar seu time selecionando jogadores reais das delegações, incluindo um goleiro. (Regra a definir: limite de jogadores por delegação, esquema tático, etc.).
-- **Mercado:** O "mercado" de jogadores fecha antes do início de cada rodada de jogos para evitar escalações durante as partidas.
+### 2.3. Funcionalidades do Fantasy Game (Usuário Padrão)
+- **RF08: Criação de Time de Fantasia:** Cada usuário poderá criar um time de fantasia, definindo um nome único para ele.
+- **RF09: Escalação de Jogadores:** O usuário escalará seu time com 1 Goleiro e 4 jogadores de linha, com um limite a ser definido de jogadores da mesma delegação.
+- **RF10: Mercado:** A escalação de times será bloqueada um pouco antes do início de cada rodada de jogos para garantir a integridade da competição.
+- **RF11: Visualização de Ranking:** Uma página exibirá o ranking geral dos usuários, ordenado pela pontuação total.
+- **RF12: Histórico de Jogador:** Uma página dedicada para cada jogador real, mostrando seu histórico de gols e prêmios de "Melhor da Partida".
 
 ### 2.4. Sistema de Pontuação
-A pontuação será baseada no desempenho real dos jogadores. Sugestão inicial:
+A pontuação será calculada com base nos eventos registrados pelo Administrador.
 - **Gol Feito:** +8 pontos
-- **Melhor da Partida:** +5 pontos
-- **Partida sem sofrer gol (Goleiro):** +5 pontos
-- **Defesa Difícil (Goleiro):** +2 pontos
-- **Gol Sofrido (Goleiro):** -2 pontos
-
-### 2.5. Histórico e Estatísticas
-- **Página do Jogador:** Cada jogador real terá uma página com seu histórico:
-    - Total de partidas jogadas.
-    - Total de gols marcados.
-    - Quantidade de vezes que foi "Melhor da Partida".
-- **Ranking:** Haverá uma tela de ranking geral mostrando a pontuação de todos os usuários do fantasy game.
+- **Prêmio "Melhor da Partida":** +5 pontos
+- **Partida sem sofrer gol (apenas para o Goleiro):** +5 pontos (Concedido se o time adversário não marcou gols na partida).
 
 ---
 
-## 3. Modelo de Dados (Sugestão)
+## 3. Arquitetura e Tecnologias (O "Como")
 
-- **Usuario:** `(id, nome, email, senha, cargo)`
-- **Delegação:** `(id, nome, id_lider)`
-- **JogadorReal:** `(id, nome, id_delegacao)`
-- **TimeFantasia:** `(id, nome, id_usuario)`
-- **Escalacao:** `(id_time_fantasia, id_jogador_real)`
-- **Partida:** `(id, data, delegacao_A, delegacao_B, placar_A, placar_B)`
-- **Desempenho:** `(id, id_partida, id_jogador, gols, foi_melhor_da_partida)`
+Para garantir um desenvolvimento ágil e um produto final robusto, a seguinte stack de tecnologia será utilizada:
 
----
+- **Tipo de Aplicação:** Aplicação Web Responsiva (Mobile-First), renderizada no servidor. Isso garante acesso universal por meio de qualquer navegador em desktops ou celulares sem a necessidade de instalar um aplicativo.
 
-## 4. Diretrizes de UI/UX
-
-Conforme solicitado, a interface será limpa e moderna:
-- **Estilo "Quadrado":** Uso de cards, botões e layouts baseados em retângulos e quadrados, com cantos pouco ou nada arredondados.
-- **Sem Gradientes:** Cores sólidas e chapadas.
-- **Hierarquia Visual Clara:** Uso de tipografia (tamanho, peso da fonte) para guiar o usuário.
-- **Paleta de Cores:** Paleta limitada e consistente, possivelmente inspirada no tema da Copa do Mundo e na identidade visual do IFBA.
-- **Foco no Conteúdo:** Evitar bordas e elementos decorativos desnecessários. A informação é a prioridade.
-
----
-
-## 5. Arquitetura e Tecnologias (Sugestão)
-
-- **Frontend (Aplicativo):**
-    - **Linguagem:** Kotlin
-    - **UI:** Jetpack Compose (ideal para criar interfaces declarativas e seguir as diretrizes de UI/UX).
-    - **Arquitetura:** MVVM (Model-View-ViewModel).
 - **Backend:**
-    - **Firebase:** Uma excelente opção para começar rápido.
-        - **Authentication:** Para gerenciar login e cadastro.
-        - **Firestore:** Como banco de dados NoSQL para armazenar todos os dados (usuários, jogadores, pontuações).
-        - **Cloud Functions:** Para lógicas de backend, como calcular as pontuações de uma rodada.
+    - **Linguagem:** **Python 3**
+    - **Framework:** **Flask**. É um micro-framework leve, ideal para prototipagem rápida e projetos de escopo bem definido. Sua simplicidade nos permite focar na lógica de negócio.
+    - **Banco de Dados:** **PostgreSQL**. Um sistema de banco de dados relacional robusto e escalável. Para o ambiente de desenvolvimento, usaremos **SQLite** para simplificar a configuração inicial.
+    - **ORM (Mapeamento Objeto-Relacional):** **SQLAlchemy** com a extensão **Flask-SQLAlchemy**. Abstrai a comunicação com o banco de dados, permitindo-nos escrever a lógica em Python puro e trocar de SGBD (SQLite para PostgreSQL) com o mínimo de esforço.
+    - **Gerenciamento de Sessão:** **Flask-Login** para controlar a autenticação e as sessões de usuário de forma segura.
+    - **Segurança:** As senhas serão armazenadas de forma segura usando hashes gerados pela biblioteca **Werkzeug**, que já vem com o Flask.
+
+- **Frontend:**
+    - **Estrutura:** **HTML5** renderizado pelo motor de templates **Jinja2**, nativo do Flask.
+    - **Estilização:** **Pico.css**. Um framework CSS minimalista que oferece um design limpo, moderno e "quadrado" (como solicitado) com o mínimo de classes e customização, focando na semântica do HTML.
+    - **Interatividade:** **JavaScript (Vanilla JS)**. Será usado de forma pontual para melhorar a experiência do usuário (ex: validações de formulário em tempo real), sem a complexidade de frameworks como React ou Vue.
+
+- **Hospedagem (Deployment):**
+    - **Plataforma Sugerida:** **PythonAnywhere** ou **Heroku**. Ambas oferecem um plano gratuito ou de baixo custo, ideal para projetos de estudantes, e simplificam o processo de deploy de aplicações Flask.
 
 ---
 
-## 6. Próximos Passos
+## 4. Modelo de Dados (Estrutura do Banco)
 
-1.  **Configuração do Projeto:** Criar o projeto Android Studio com as dependências necessárias (Jetpack Compose, Firebase).
-2.  **Autenticação:** Implementar as telas e a lógica de Cadastro e Login.
-3.  **Estrutura do Banco de Dados:** Modelar e criar as coleções no Firestore.
-4.  **Telas Principais:** Desenvolver as telas para visualização de jogadores, ranking e escalação do time.
-5.  **Painel de Admin:** Criar as funcionalidades para os administradores e líderes de delegação.
+```
+// Tabela de Usuários
+Usuario {
+  id (PK)
+  nome (String)
+  email (String, Unique)
+  password_hash (String)
+  cargo (Enum: 'ADMIN', 'LIDER', 'USER')
+}
+
+// Tabela de Delegações (Times Reais)
+Delegação {
+  id (PK)
+  nome (String, Unique)
+  lider_id (FK -> Usuario.id, Nullable)
+}
+
+// Tabela de Jogadores Reais
+Jogador {
+  id (PK)
+  nome (String)
+  delegacao_id (FK -> Delegação.id)
+}
+
+// Tabela dos Times de Fantasia dos Usuários
+TimeFantasia {
+  id (PK)
+  nome (String)
+  usuario_id (FK -> Usuario.id, Unique) // Um time por usuário
+}
+
+// Tabela de Associação para Escalação (Muitos-para-Muitos)
+Escalacao {
+  time_fantasia_id (FK -> TimeFantasia.id)
+  jogador_id (FK -> Jogador.id)
+  PRIMARY KEY (time_fantasia_id, jogador_id)
+}
+
+// Tabela de Partidas Reais
+Partida {
+  id (PK)
+  data (DateTime)
+  delegacao_a_id (FK -> Delegação.id)
+  delegacao_b_id (FK -> Delegação.id)
+  placar_a (Integer)
+  placar_b (Integer)
+  finalizada (Boolean, default=False)
+}
+
+// Tabela para registrar eventos que geram pontos
+Evento {
+  id (PK)
+  partida_id (FK -> Partida.id)
+  jogador_id (FK -> Jogador.id)
+  tipo_evento (Enum: 'GOL', 'MELHOR_DA_PARTIDA')
+}
+```
+
+---
+
+## 5. Plano de Implementação (Roadmap)
+
+O desenvolvimento será dividido em fases para uma entrega incremental e organizada.
+
+- **Fase 1: Fundação e Autenticação**
+    1. Configurar o projeto Flask, banco de dados com SQLAlchemy.
+    2. Criar o modelo de dados `Usuario`.
+    3. Implementar as rotas e templates para Cadastro, Login e Logout.
+    4. Proteger rotas que exigem autenticação.
+
+- **Fase 2: Painéis de Gerenciamento (Admin e Líder)**
+    1. Criar as interfaces de administração.
+    2. Implementar o CRUD (Criar, Ler, Atualizar, Deletar) para `Delegação` (Admin).
+    3. Implementar o CRUD para `Jogador` (Líder de Delegação, restrito à sua delegação).
+    4. Implementar a funcionalidade para o Admin designar um `Líder`.
+
+- **Fase 3: Funcionalidade Central do Usuário**
+    1. Implementar a criação do `TimeFantasia`.
+    2. Desenvolver a interface de escalação de jogadores, buscando da lista geral.
+    3. Criar a página de visualização do próprio time.
+
+- **Fase 4: Lógica do Jogo e Pontuação**
+    1. Implementar o CRUD para `Partida` (Admin).
+    2. Implementar a interface para o Admin registrar `Eventos` (gols, melhor da partida) pós-jogo.
+    3. Desenvolver o script que calcula a pontuação de cada `TimeFantasia` com base nos eventos e atualiza o ranking.
+
+- **Fase 5: Visualização e Finalização**
+    1. Criar a página de Ranking Geral.
+    2. Criar a página de perfil público para cada `Jogador`, com suas estatísticas.
+    3. Polir a interface do usuário e realizar testes de usabilidade.
+```

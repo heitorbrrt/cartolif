@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<article>
+    <header>
+        <h2>Gerenciar Delegação: {{ delegacao.nome }}</h2>
+    </header>
+
+    <p><strong>Líder Atual:</strong> {{ delegacao.lider.nome if delegacao.lider else 'Nenhum' }}</p>
+
+    <form method="POST" action="{{ url_for('admin.assign_lider', id=delegacao.id) }}">
+        <label for="lider">Designar Novo Líder</label>
+        <select id="lider" name="user_id" required>
+            <option value="" disabled selected>Selecione um usuário...</option>
+            {% for user in usuarios %}
+            <option value="{{ user.id }}" {% if delegacao.lider_id == user.id %}selected{% endif %}>
+                {{ user.nome }} ({{ user.email }})
+            </option>
+            {% endfor %}
+        </select>
+        <button type="submit">Salvar Líder</button>
+    </form>
+
+    <hr>
+
+    <a href="{{ url_for('admin.index') }}" role="button" class="secondary">Voltar ao Painel</a>
+</article>
+{% endblock %}
