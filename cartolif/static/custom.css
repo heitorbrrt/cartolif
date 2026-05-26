@@ -1,0 +1,77 @@
+/* Paleta de Cores e Variáveis Globais */
+:root {
+    --ifba-green: #00843D;
+    --ifba-green-dark: #006A31;
+    --ifba-green-light: #E6F3EC;
+    --ifba-gray: #f6f6f6;
+
+    --primary: var(--ifba-green);
+    --primary-hover: var(--ifba-green-dark);
+    --primary-focus: rgba(0, 132, 61, 0.125);
+    --primary-inverse: #FFF;
+
+    --card-background-color: #ffffff;
+    --card-border-color: #e1e1e1;
+    --form-element-background-color: var(--ifba-gray);
+    --form-element-border-color: #d1d1d1;
+}
+
+/* Melhorias na Barra de Navegação */
+nav {
+    background-color: var(--ifba-green);
+    color: white;
+    padding: 0.75rem 1rem;
+    border-bottom: 3px solid var(--ifba-green-dark);
+}
+
+nav a {
+    color: white !important;
+    font-weight: 500;
+    transition: background-color 0.2s ease-in-out;
+}
+
+nav a:hover {
+    background-color: var(--ifba-green-dark);
+    border-radius: var(--border-radius);
+}
+
+nav a[role="button"] {
+    background-color: white;
+    color: var(--ifba-green) !important;
+    border-color: white;
+}
+
+nav a[role="button"]:hover {
+    background-color: var(--ifba-gray);
+    border-color: var(--ifba-gray);
+}
+
+
+/* Estilo para os cards de estatísticas */
+.stat-card {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: var(--card-background-color);
+    border: 1px solid var(--card-border-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-box-shadow);
+}
+
+.stat-card h3 {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 0;
+}
+
+.stat-card p {
+    margin-top: 0;
+    font-weight: bold;
+    color: var(--muted-color);
+}
+
+/* Melhoria nos Alertas (Flashed Messages) */
+article.error {
+    background-color: var(--pico-color-red-150);
+    border-color: var(--pico-color-red-550);
+    color: var(--pico-color-red-700);
+}

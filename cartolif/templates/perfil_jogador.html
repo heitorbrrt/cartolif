@@ -11,26 +11,14 @@
     </header>
 
     <div class="grid">
-        <div class="stat">
+        <div class="stat-card">
             <h3>{{ stats.gols }}</h3>
             <p>Gols Marcados</p>
         </div>
-        <div class="stat">
+        <div class="stat-card">
             <h3>{{ stats.mvps }}</h3>
             <p>Vezes "Melhor da Partida"</p>
         </div>
     </div>
 </article>
-
-<style>
-    .stat {
-        text-align: center;
-        padding: 1rem;
-        border: 1px solid var(--muted-border-color);
-        border-radius: var(--border-radius);
-    }
-    .stat h3 {
-        margin-bottom: 0;
-    }
-</style>
 {% endblock %}
