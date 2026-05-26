@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<article>
+    <header>
+        <h2>Ranking Geral</h2>
+    </header>
+    <table>
+        <thead>
+            <tr>
+                <th>Pos.</th>
+                <th>Time</th>
+                <th>Dono(a)</th>
+                <th>Pontuação</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in ranking %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td><strong>{{ item.time.nome }}</strong></td>
+                <td>{{ item.time.usuario.nome }}</td>
+                <td>{{ item.pontuacao }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">Nenhum time no ranking ainda.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</article>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<article>
+    <header>
+        <h2>Lista de Jogadores</h2>
+    </header>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Delegação</th>
+                <th>Posição</th>
+                <th>Perfil</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for jogador in jogadores %}
+            <tr>
+                <td>{{ jogador.nome }}</td>
+                <td>{{ jogador.delegacao.nome }}</td>
+                <td>{{ jogador.posicao }}</td>
+                <td><a href="{{ url_for('routes.perfil_jogador', id=jogador.id) }}">Ver Stats</a></td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">Nenhum jogador cadastrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</article>
+{% endblock %}

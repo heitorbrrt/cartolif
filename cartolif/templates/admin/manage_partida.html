@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+<article>
+    <header>
+        <h2>Registrar Eventos: {{ partida.delegacao_a.nome }} vs {{ partida.delegacao_b.nome }}</h2>
+        <p>{{ partida.data.strftime('%d/%m/%Y %H:%M') }}</p>
+    </header>
+
+    <!-- Formulário para atualizar placar e finalizar -->
+    <form method="POST" action="{{ url_for('admin.update_placar', id=partida.id) }}">
+        <div class="grid">
+            <label for="placar_a">
+                Placar {{ partida.delegacao_a.nome }}
+                <input type="number" name="placar_a" value="{{ partida.placar_a }}" min="0">
+            </label>
+            <label for="placar_b">
+                Placar {{ partida.delegacao_b.nome }}
+                <input type="number" name="placar_b" value="{{ partida.placar_b }}" min="0">
+            </label>
+        </div>
+        <label for="finalizada">
+            <input type="checkbox" id="finalizada" name="finalizada" {% if partida.finalizada %}checked{% endif %}>
+            Marcar como Finalizada
+        </label>
+        <button type="submit">Atualizar Placar e Status</button>
+    </form>
+
+    <hr>
+
+    <!-- Formulários para registrar eventos -->
+    <h4>Registrar Eventos de Pontuação</h4>
+    <div class="grid">
+        <!-- Registrar Gol -->
+        <section>
+            <h5>Registrar Gol</h5>
+            <form method="POST" action="{{ url_for('admin.add_evento', id=partida.id) }}">
+                <input type="hidden" name="tipo_evento" value="GOL">
+                <label for="gol_jogador">Jogador</label>
+                <select id="gol_jogador" name="jogador_id" required>
+                    <option disabled selected>Selecione o jogador...</option>
+                    {% for jogador in todos_jogadores_partida %}
+                    <option value="{{ jogador.id }}">{{ jogador.nome }} ({{ jogador.delegacao.nome }})</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Adicionar Gol</button>
+            </form>
+        </section>
+        <!-- Registrar Melhor da Partida -->
+        <section>
+            <h5>Registrar Melhor da Partida</h5>
+            <form method="POST" action="{{ url_for('admin.add_evento', id=partida.id) }}">
+                <input type="hidden" name="tipo_evento" value="MELHOR_DA_PARTIDA">
+                <label for="mvp_jogador">Jogador</label>
+                <select id="mvp_jogador" name="jogador_id" required>
+                    <option disabled selected>Selecione o jogador...</option>
+                    {% for jogador in todos_jogadores_partida %}
+                    <option value="{{ jogador.id }}">{{ jogador.nome }} ({{ jogador.delegacao.nome }})</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Definir MVP</button>
+            </form>
+        </section>
+    </div>
+
+    <hr>
+
+    <!-- Lista de eventos já registrados -->
+    <h4>Eventos Registrados</h4>
+    {% if partida.eventos %}
+    <ul>
+        {% for evento in partida.eventos %}
+        <li>
+            <strong>{{ evento.tipo_evento.replace('_', ' ') | title }}:</strong>
+            {{ evento.jogador.nome }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>Nenhum evento registrado para esta partida.</p>
+    {% endif %}
+
+</article>
+{% endblock %}

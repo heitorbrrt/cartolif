@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<article>
+    <header>
+        <h2>Crie seu Time de Fantasia!</h2>
+    </header>
+    <p>Para começar a competir, você precisa criar seu time. Escolha um nome criativo para ele!</p>
+
+    <form method="POST" action="{{ url_for('routes.create_team') }}">
+        <label for="team_name">Nome do Time</label>
+        <input type="text" id="team_name" name="team_name" placeholder="Ex: Real Madruga FC" required>
+        <button type="submit">Criar Time</button>
+    </form>
+</article>
+{% endblock %}

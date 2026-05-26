@@ -14,6 +14,13 @@
             <form method="POST" action="{{ url_for('lider.add_jogador') }}">
                 <label for="nome_jogador">Nome do Jogador</label>
                 <input type="text" id="nome_jogador" name="nome" required>
+
+                <label for="posicao">Posição</label>
+                <select id="posicao" name="posicao" required>
+                    <option value="Linha" selected>Linha</option>
+                    <option value="Goleiro">Goleiro</option>
+                </select>
+
                 <button type="submit">Adicionar Jogador</button>
             </form>
         </section>
@@ -21,11 +28,22 @@
         <section>
             <h4>Jogadores Cadastrados</h4>
             {% if delegacao.jogadores %}
-            <ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Posição</th>
+                    </tr>
+                </thead>
+                <tbody>
                 {% for jogador in delegacao.jogadores|sort(attribute='nome') %}
-                <li>{{ jogador.nome }}</li>
+                <tr>
+                    <td>{{ jogador.nome }}</td>
+                    <td>{{ jogador.posicao }}</td>
+                </tr>
                 {% endfor %}
-            </ul>
+                </tbody>
+            </table>
             {% else %}
             <p>Nenhum jogador cadastrado ainda.</p>
             {% endif %}

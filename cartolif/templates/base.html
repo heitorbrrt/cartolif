@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CartolIF</title>
-    <!-- Pico.css para um estilo limpo e moderno -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
-    <!-- Nosso CSS customizado (se necessário) -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <nav class="container-fluid">
         <ul>
             <li><a href="{{ url_for('routes.index') }}"><strong>CartolIF</strong></a></li>
+            <li><a href="{{ url_for('routes.ranking') }}">Ranking</a></li>
+            <li><a href="{{ url_for('routes.lista_jogadores') }}">Jogadores</a></li>
         </ul>
         <ul>
             {% if current_user.is_authenticated %}

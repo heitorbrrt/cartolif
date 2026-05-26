@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import Blueprint, render_template, abort, request, flash, redirect, url_for
 from flask_login import current_user, login_required
-from .models import Jogador, Delegacao
+from .models import Jogador
 from . import db
 
 bp = Blueprint('lider', __name__, url_prefix='/lider')
@@ -22,7 +22,6 @@ def lider_required(f):
 @bp.route('/')
 @lider_required
 def index():
-    # O decorator já garante que current_user.delegacao existe
     delegacao = current_user.delegacao
     return render_template('lider/index.html', delegacao=delegacao)
 
@@ -30,14 +29,15 @@ def index():
 @lider_required
 def add_jogador():
     nome = request.form.get('nome')
+    posicao = request.form.get('posicao')
     delegacao = current_user.delegacao
 
-    if nome:
-        novo_jogador = Jogador(nome=nome, delegacao=delegacao)
+    if nome and posicao:
+        novo_jogador = Jogador(nome=nome, posicao=posicao, delegacao=delegacao)
         db.session.add(novo_jogador)
         db.session.commit()
-        flash(f'Jogador "{nome}" adicionado com sucesso!', 'success')
+        flash(f'Jogador "{nome}" ({posicao}) adicionado com sucesso!', 'success')
     else:
-        flash('O nome do jogador não pode ser vazio.', 'error')
+        flash('O nome e a posição do jogador são obrigatórios.', 'error')
         
     return redirect(url_for('lider.index'))

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<article>
+    <header>
+        <h2>Meu Time: {{ current_user.time_fantasia.nome }}</h2>
+    </header>
+
+    <section>
+        <h4>Escalar Time</h4>
+        <p>Selecione 1 Goleiro e 4 jogadores de linha.</p>
+
+        <form method="POST" action="{{ url_for('routes.update_escalacao') }}">
+            <fieldset>
+                <label for="goleiro">Goleiro</label>
+                <select id="goleiro" name="goleiro" required>
+                    <option value="" disabled selected>Selecione um goleiro...</option>
+                    {% for jogador in goleiros %}
+                    <option value="{{ jogador.id }}">{{ jogador.nome }} ({{ jogador.delegacao.nome }})</option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+
+            <fieldset>
+                <label>Jogadores de Linha (Selecione 4)</label>
+                {% for i in range(4) %}
+                <select name="jogadores_linha" required>
+                    <option value="" disabled selected>Selecione um jogador de linha...</option>
+                    {% for jogador in jogadores_linha %}
+                    <option value="{{ jogador.id }}">{{ jogador.nome }} ({{ jogador.delegacao.nome }})</option>
+                    {% endfor %}
+                </select>
+                {% endfor %}
+            </fieldset>
+
+            <button type="submit">Salvar Escalação</button>
+        </form>
+    </section>
+
+    <hr>
+
+    <section>
+        <h4>Sua Escalação Atual</h4>
+        {% if escalacao_atual %}
+        <ul>
+            {% for jogador in escalacao_atual|sort(attribute='posicao', reverse=True) %}
+            <li><strong>{{ jogador.posicao }}:</strong> {{ jogador.nome }} ({{ jogador.delegacao.nome }})</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>Você ainda não escalou seu time.</p>
+        {% endif %}
+    </section>
+
+</article>
+{% endblock %}

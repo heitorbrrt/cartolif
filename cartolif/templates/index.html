@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>JIFBA Fantasy</title>
-</head>
-<body>
-    <h1>Bem-vindo ao JIFBA Fantasy App!</h1>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<article>
+    <header>
+        <h2>Bem-vindo ao CartolIF!</h2>
+    </header>
+    <p>O seu fantasy game para os Jogos Internos do IFBA - Campus Irecê.</p>
+    <p>Crie sua conta, monte seu time e compita com seus colegas para ver quem entende mais do futebol do JIFBA.</p>
+    
+    {% if not current_user.is_authenticated %}
+    <div class="grid">
+        <a href="{{ url_for('auth.login') }}" role="button">Fazer Login</a>
+        <a href="{{ url_for('auth.signup') }}" role="button" class="secondary">Criar Conta</a>
+    </div>
+    {% else %}
+    <a href="{{ url_for('routes.dashboard') }}" role="button">Ir para o meu time</a>
+    {% endif %}
+</article>
+{% endblock %}

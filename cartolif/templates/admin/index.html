@@ -1,35 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="grid">
-    <article>
-        <header><h2>Painel de Administração</h2></header>
-        <p>Bem-vindo, {{ current_user.nome }}. Use esta página para gerenciar o campeonato.</p>
-    </article>
-</div>
+<article>
+    <header><h2>Painel de Administração</h2></header>
+    <p>Bem-vindo, {{ current_user.nome }}. Use esta página para gerenciar o campeonato.</p>
+</article>
 
 <div class="grid">
     <article>
         <header><h3>Gerenciar Delegações</h3></header>
-
         <form method="POST" action="{{ url_for('admin.add_delegacao') }}">
             <label for="nome_delegacao">Nome da Nova Delegação</label>
             <input type="text" id="nome_delegacao" name="nome" required>
             <button type="submit">Adicionar Delegação</button>
         </form>
-
         <hr>
-
         <h4>Delegações Existentes</h4>
         {% if delegacoes %}
         <table>
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Líder</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
             <tbody>
             {% for delegacao in delegacoes %}
                 <tr>
@@ -46,8 +34,45 @@
     </article>
 
     <article>
-        <header><h3>Gerenciar Usuários</h3></header>
-        <p>Funcionalidade a ser implementada.</p>
+        <header><h3>Gerenciar Partidas</h3></header>
+        <form method="POST" action="{{ url_for('admin.add_partida') }}">
+            <div class="grid">
+                <label for="delegacao_a">
+                    Delegação A
+                    <select id="delegacao_a" name="delegacao_a_id" required>
+                        <option disabled selected>Selecione...</option>
+                        {% for d in delegacoes %}<option value="{{ d.id }}">{{ d.nome }}</option>{% endfor %}
+                    </select>
+                </label>
+                <label for="delegacao_b">
+                    Delegação B
+                    <select id="delegacao_b" name="delegacao_b_id" required>
+                        <option disabled selected>Selecione...</option>
+                        {% for d in delegacoes %}<option value="{{ d.id }}">{{ d.nome }}</option>{% endfor %}
+                    </select>
+                </label>
+            </div>
+            <label for="data">Data e Hora</label>
+            <input type="datetime-local" id="data" name="data" required>
+            <button type="submit">Agendar Partida</button>
+        </form>
+        <hr>
+        <h4>Partidas Agendadas</h4>
+        {% if partidas %}
+        <table>
+            <tbody>
+            {% for partida in partidas %}
+                <tr>
+                    <td>{{ partida.delegacao_a.nome }} vs {{ partida.delegacao_b.nome }}</td>
+                    <td>{{ partida.data.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td><a href="{{ url_for('admin.manage_partida', id=partida.id) }}">Registrar Eventos</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>Nenhuma partida agendada.</p>
+        {% endif %}
     </article>
 </div>
 {% endblock %}
